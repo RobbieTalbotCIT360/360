@@ -1,5 +1,7 @@
 // sandbox code from tutorialspoint 
 
+// example 1 ------------------------------------------------------------
+
 import java.util.*;
 import java.io.*;
 
@@ -25,7 +27,7 @@ public class ArrayToCollection{
 
 // sandbox example from vogella
 
-// example 1 ------------------------------------------------------------
+// example 2 ------------------------------------------------------------
 
 package com.vogella.java.collections.list;
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class ListExample {
 
 }
 
-// example 2 ---------------------------------------------------------------
+// example 3 ---------------------------------------------------------------
 
 package com.vogella.java.collections.list;
 
@@ -78,7 +80,7 @@ public class ListSorter {
 
 }
 
-// example 3 ---------------------------------------------------------------
+// example 4 ---------------------------------------------------------------
 
 package com.vogella.java.collections.list;
 
@@ -102,7 +104,7 @@ public class RemoveIfList {
     }
 }
 
-// example 4 -------------------------------------------------------------------
+// example 5 -------------------------------------------------------------------
 
 package com.vogella.java.collections.map;
 
@@ -137,7 +139,7 @@ public class MapTester {
 
     }
     
- // example 5 ---------------------------------------------------------   
+ // example 6 ---------------------------------------------------------   
     import java.util.*; 
   
 class TreeSetDemo { 
@@ -161,7 +163,7 @@ class TreeSetDemo {
 
 }
 
-// example 6 ---------------------------------------------------------
+// example 7 ---------------------------------------------------------
 
 Set<String> names = new HashSet<>();
 names.add("Tom");
