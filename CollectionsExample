@@ -136,5 +136,41 @@ public class MapTester {
         map.put("Git", "Version control system");
 
     }
+    
+ // example 5 ---------------------------------------------------------   
+    import java.util.*; 
+  
+class TreeSetDemo { 
+    public static void main(String[] args) 
+    { 
+        TreeSet<String> ts1 = new TreeSet<String>(); 
+  
+        // Elements are added using add() method 
+        ts1.add("A"); 
+        ts1.add("B"); 
+        ts1.add("C"); 
+  
+        // Duplicates will not get insert 
+        ts1.add("C"); 
+  
+        // Elements get stored in default natural 
+        // Sorting Order(Ascending) 
+        System.out.println(ts1); 
+    } 
+}
 
+}
+
+// example 6 ---------------------------------------------------------
+
+Set<String> names = new HashSet<>();
+names.add("Tom");
+names.add("Mary");
+
+if (names.add("Peter")) {
+	System.out.println("Peter is added to the set");
+}
+
+if (!names.add("Tom")) {
+	System.out.println("Tom is already added to the set");
 }
