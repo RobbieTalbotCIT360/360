@@ -1,0 +1,121 @@
+// example 1 ----------------------------------------------------
+
+Runnable task = () -> {
+    String threadName = Thread.currentThread().getName();
+    System.out.println("Hello " + threadName);
+};
+
+task.run();
+
+Thread thread = new Thread(task);
+thread.start();
+
+System.out.println("Done!");
+
+// example 2 Delays ----------------------------------------------------
+
+Runnable runnable = () -> {
+    try {
+        String name = Thread.currentThread().getName();
+        System.out.println("Foo " + name);
+        TimeUnit.SECONDS.sleep(1);
+        System.out.println("Bar " + name);
+    }
+    catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+};
+
+Thread thread = new Thread(runnable);
+thread.start();
+
+// example 3 Executors   ----------------------------------------------------
+
+ExecutorService executor = Executors.newSingleThreadExecutor();
+executor.submit(() -> {
+    String threadName = Thread.currentThread().getName();
+    System.out.println("Hello " + threadName);
+});
+
+// => Hello pool-1-thread-1
+
+// example 4 Shutdown Executors   ----------------------------------------------------
+
+try {
+    System.out.println("attempt to shutdown executor");
+    executor.shutdown();
+    executor.awaitTermination(5, TimeUnit.SECONDS);
+}
+catch (InterruptedException e) {
+    System.err.println("tasks interrupted");
+}
+finally {
+    if (!executor.isTerminated()) {
+        System.err.println("cancel non-finished tasks");
+    }
+    executor.shutdownNow();
+    System.out.println("shutdown finished");
+}
+
+// example 5 Executors   ----------------------------------------------------
+
+ExecutorService executor = Executors.newFixedThreadPool(1);
+Future<Integer> future = executor.submit(task);
+
+System.out.println("future done? " + future.isDone());
+
+Integer result = future.get();
+
+System.out.println("future done? " + future.isDone());
+System.out.print("result: " + result);
+
+// example 6 Timeouts   ----------------------------------------------------
+
+ExecutorService executor = Executors.newFixedThreadPool(1);
+
+Future<Integer> future = executor.submit(() -> {
+    try {
+        TimeUnit.SECONDS.sleep(2);
+        return 123;
+    }
+    catch (InterruptedException e) {
+        throw new IllegalStateException("task interrupted", e);
+    }
+});
+
+future.get(1, TimeUnit.SECONDS);
+
+
+// example 7 InvokeAll   ----------------------------------------------------
+
+ExecutorService executor = Executors.newWorkStealingPool();
+
+List<Callable<String>> callables = Arrays.asList(
+        () -> "task1",
+        () -> "task2",
+        () -> "task3");
+
+executor.invokeAll(callables)
+    .stream()
+    .map(future -> {
+        try {
+            return future.get();
+        }
+        catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    })
+    .forEach(System.out::println);
+    
+ 
+// example 8 Scheduled ----------------------------------------------------   
+    
+ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
+Runnable task = () -> System.out.println("Scheduling: " + System.nanoTime());
+ScheduledFuture<?> future = executor.schedule(task, 3, TimeUnit.SECONDS);
+
+TimeUnit.MILLISECONDS.sleep(1337);
+
+long remainingDelay = future.getDelay(TimeUnit.MILLISECONDS);
+System.out.printf("Remaining Delay: %sms", remainingDelay);
