@@ -92,13 +92,13 @@ public class StudentVO {
     }
 }
 
-// Now create Command interface. 
+     // Now create Command interface. 
 
 public interface Command {
     String execute(RequestContext requestContext);
 }
 
-// StudentViewCommand class which implements Command interface 
+     // StudentViewCommand class which implements Command interface 
 
 public class StudentViewCommand implements Command {
 
@@ -199,7 +199,7 @@ public class RequestContext {
 }
 
 //--------------------------------------------------------------------------------------------------------
-// Step 4: It's time to create FrontController.java.
+// Step 4: Create FrontController.java.
 //--------------------------------------------------------------------------------------------------------
 
 import javax.servlet.ServletException;
