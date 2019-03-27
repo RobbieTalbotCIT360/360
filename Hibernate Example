@@ -1,3 +1,8 @@
+
+//==============================================================================================================
+// Create 'Plain Old Java Object' Classes
+//==============================================================================================================
+
 public class Employee {
    private int id;
    private String firstName; 
@@ -44,6 +49,10 @@ public class Employee {
    }
 }
 
+//==============================================================================================================
+// Create Database Tables
+//==============================================================================================================
+
 create table EMPLOYEE (
    id INT NOT NULL auto_increment,
    first_name VARCHAR(20) default NULL,
@@ -51,6 +60,10 @@ create table EMPLOYEE (
    salary     INT  default NULL,
    PRIMARY KEY (id)
 );
+
+//==============================================================================================================
+// Create Mapping Configuration File
+//==============================================================================================================
 
 <?xml version = "1.0" encoding = "utf-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC 
@@ -74,6 +87,10 @@ create table EMPLOYEE (
       
    </class>
 </hibernate-mapping>
+
+//==============================================================================================================
+// Create Application Class
+//==============================================================================================================
 
 import java.util.List; 
 import java.util.Date;
@@ -196,3 +213,36 @@ public class ManageEmployee {
       }
    }
 }
+
+//==============================================================================================================
+// Compilation and Execution
+//==============================================================================================================
+ /* ------------------------------------------------------------------------
+ 
+ Output should look like the following:
+ 
+ $java ManageEmployee
+.......VARIOUS LOG MESSAGES WILL DISPLAY HERE........
+
+First Name: Zara  Last Name: Ali  Salary: 1000
+First Name: Daisy  Last Name: Das  Salary: 5000
+First Name: John  Last Name: Paul  Salary: 10000
+First Name: Zara  Last Name: Ali  Salary: 5000
+First Name: John  Last Name: Paul  Salary: 10000
+
+----------------------------------------------------------------------
+If you check your EMPLOYEE table, it should have the following records" 
+
+mysql> select * from EMPLOYEE;
++----+------------+-----------+--------+
+| id | first_name | last_name | salary |
++----+------------+-----------+--------+
+| 29 | Zara       | Ali       |   5000 |
+| 31 | John       | Paul      |  10000 |
++----+------------+-----------+--------+
+2 rows in set (0.00 sec
+
+mysql>
+
+------------------------------------------------------------------------------*/
+
