@@ -1,353 +1,7 @@
-String message = URLEncoder.encode("my message", "UTF-8");
-
-try {
-    // instantiate the URL object with the target URL of the resource to
-    // request
-    URL url = new URL("http://www.example.com/comment");
-
-    // instantiate the HttpURLConnection with the URL object - A new
-    // connection is opened every time by calling the openConnection
-    // method of the protocol handler for this URL.
-    // 1. This is the point where the connection is opened.
-    HttpURLConnection connection = (HttpURLConnection) url
-            .openConnection();
-    // set connection output to true
-    connection.setDoOutput(true);
-    // instead of a GET, we're going to send using method="POST"
-    connection.setRequestMethod("POST");
-
-    // instantiate OutputStreamWriter using the output stream, returned
-    // from getOutputStream, that writes to this connection.
-    // 2. This is the point where you'll know if the connection was
-    // successfully established. If an I/O error occurs while creating
-    // the output stream, you'll see an IOException.
-    OutputStreamWriter writer = new OutputStreamWriter(
-            connection.getOutputStream());
-
-    // write data to the connection. This is data that you are sending
-    // to the server
-    // 3. No. Sending the data is conducted here. We established the
-    // connection with getOutputStream
-    writer.write("message=" + message);
-
-    // Closes this output stream and releases any system resources
-    // associated with this stream. At this point, we've sent all the
-    // data. Only the outputStream is closed at this point, not the
-    // actual connection
-    writer.close();
-    // if there is a response code AND that response code is 200 OK, do
-    // stuff in the first if block
-    if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-        // OK
-
-        // otherwise, if any other status code is returned, or no status
-        // code is returned, do stuff in the else block
-    } else {
-        // Server returned HTTP error code.
-    }
-} catch (MalformedURLException e) {
-    // ...
-} catch (IOException e) {
-    // ...
-}
-
------------------------------------------------------------------------------------------------------------------
-   URL url = new URL("http://www.android.com/");
-   HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-   try {
-     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-     readStream(in);
-   } finally {
-     urlConnection.disconnect();
-   }
-   
------------------------------------------------------------------------------------------------------------------
- 
-   HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-   try {
-     urlConnection.setDoOutput(true);
-     urlConnection.setChunkedStreamingMode(0);
-
-     OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-     writeStream(out);
-
-     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-     readStream(in);
-   } finally {
-     urlConnection.disconnect();
-   }
- 
- -----------------------------------------------------------------------------------------------------------------
- 
-    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-   try {
-     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-     if (!url.getHost().equals(urlConnection.getURL().getHost())) {
-       // we were redirected! Kick the user out to the browser to sign on?
-     }
-     ...
-   } finally {
-     urlConnection.disconnect();
-   }
- 
-  -----------------------------------------------------------------------------------------------------------------
-  
-     Authenticator.setDefault(new Authenticator() {
-     protected PasswordAuthentication getPasswordAuthentication() {
-       return new PasswordAuthentication(username, password.toCharArray());
-     }
-   });
-   
-   
-  -----------------------------------------------------------------------------------------------------------------
-  
-  package com.mkyong;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
-
-public class HttpURLConnectionExample {
-
-	private final String USER_AGENT = "Mozilla/5.0";
-
-	public static void main(String[] args) throws Exception {
-
-		HttpURLConnectionExample http = new HttpURLConnectionExample();
-
-		System.out.println("Testing 1 - Send Http GET request");
-		http.sendGet();
-		
-		System.out.println("\nTesting 2 - Send Http POST request");
-		http.sendPost();
-
-	}
-
-	// HTTP GET request
-	private void sendGet() throws Exception {
-
-		String url = "http://www.google.com/search?q=mkyong";
-		
-		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-		// optional default is GET
-		con.setRequestMethod("GET");
-
-		//add request header
-		con.setRequestProperty("User-Agent", USER_AGENT);
-
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-
-		//print result
-		System.out.println(response.toString());
-
-	}
-	
-	// HTTP POST request
-	private void sendPost() throws Exception {
-
-		String url = "https://selfsolve.apple.com/wcResults.do";
-		URL obj = new URL(url);
-		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-
-		//add reuqest header
-		con.setRequestMethod("POST");
-		con.setRequestProperty("User-Agent", USER_AGENT);
-		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-		String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
-		
-		// Send post request
-		con.setDoOutput(true);
-		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-		wr.writeBytes(urlParameters);
-		wr.flush();
-		wr.close();
-
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + urlParameters);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-		
-		//print result
-		System.out.println(response.toString());
-
-	}
-
-}
-
-  
-  -----------------------------------------------------------------------------------------------------------------
-  
-  Sending 'GET' request to URL : http://www.google.com/search?q=mkyong
-Response Code : 200
-Google search result...
-
-Testing 2 - Send Http POST request
-
-Sending 'POST' request to URL : https://selfsolve.apple.com/wcResults.do
-Post parameters : sn=C02G8416DRJM&cn=&locale=&caller=&num=12345
-Response Code : 200
-Apple product detail...
-
-  
-  -----------------------------------------------------------------------------------------------------------------
-  
-package com.mkyong;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-public class HttpClientExample {
-
-	private final String USER_AGENT = "Mozilla/5.0";
-
-	public static void main(String[] args) throws Exception {
-
-		HttpClientExample http = new HttpClientExample();
-
-		System.out.println("Testing 1 - Send Http GET request");
-		http.sendGet();
-
-		System.out.println("\nTesting 2 - Send Http POST request");
-		http.sendPost();
-
-	}
-
-	// HTTP GET request
-	private void sendGet() throws Exception {
-
-		String url = "http://www.google.com/search?q=developer";
-
-		HttpClient client = new DefaultHttpClient();
-		HttpGet request = new HttpGet(url);
-
-		// add request header
-		request.addHeader("User-Agent", USER_AGENT);
-
-		HttpResponse response = client.execute(request);
-
-		System.out.println("\nSending 'GET' request to URL : " + url);
-		System.out.println("Response Code : " + 
-                       response.getStatusLine().getStatusCode());
-
-		BufferedReader rd = new BufferedReader(
-                       new InputStreamReader(response.getEntity().getContent()));
-
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-
-		System.out.println(result.toString());
-
-	}
-
-	// HTTP POST request
-	private void sendPost() throws Exception {
-
-		String url = "https://selfsolve.apple.com/wcResults.do";
-
-		HttpClient client = new DefaultHttpClient();
-		HttpPost post = new HttpPost(url);
-
-		// add header
-		post.setHeader("User-Agent", USER_AGENT);
-
-		List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-		urlParameters.add(new BasicNameValuePair("sn", "C02G8416DRJM"));
-		urlParameters.add(new BasicNameValuePair("cn", ""));
-		urlParameters.add(new BasicNameValuePair("locale", ""));
-		urlParameters.add(new BasicNameValuePair("caller", ""));
-		urlParameters.add(new BasicNameValuePair("num", "12345"));
-
-		post.setEntity(new UrlEncodedFormEntity(urlParameters));
-
-		HttpResponse response = client.execute(post);
-		System.out.println("\nSending 'POST' request to URL : " + url);
-		System.out.println("Post parameters : " + post.getEntity());
-		System.out.println("Response Code : " + 
-                                    response.getStatusLine().getStatusCode());
-
-		BufferedReader rd = new BufferedReader(
-                        new InputStreamReader(response.getEntity().getContent()));
-
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-
-		System.out.println(result.toString());
-
-	}
-
-}
-
-  
-  -----------------------------------------------------------------------------------------------------------------
-  
-  InputStream inputStream = urlCon.getInputStream();
-InputStreamReader reader = new InputStreamReader(inputStream);
- 
-int character = reader.read();  // reads a single character
-char[] buffer = new char[4096];
-reader.read(buffer);    // reads to an array of characters
-  
-  -----------------------------------------------------------------------------------------------------------------
- 
-OutputStreamWriter writer = new OutputStreamWriter(outputStream);
-int character = 'a';
-writer.write(character); // writes a single character
- 
-char[] buffer = new char[4096];
-writer.write(buffer); // writes an array of characters
-
-  -----------------------------------------------------------------------------------------------------------------
-
-// Java program to illustrate the 
-// use of HttpURLConnection 
-// to retrieve the emotion score 
-// of image using Microsoft Emotion api 
+//======================================================================================================================
+// Java program to illustrate the use of HttpURLConnection to retrieve 
+// the emotion score of image using Microsoft Emotion api 
+//======================================================================================================================
 
 import java.io.BufferedReader; 
 import java.io.IOException; 
@@ -360,99 +14,95 @@ import org.json.simple.JSONObject;
 
 public class httpconclass 
 { 
-	public static void main(String args[]) throws IOException 
+public static void main(String args[]) throws IOException 
+{ 
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+	int n = Integer.parseInt(br.readLine()); 
+	String key = "833921b016964f95905442e0fab0c229"; 
+	JSONObject ezm; 
+
+	while (n-- > 0) 
+{ 
+	String image = br.readLine(); 
+	ezm = new JSONObject(); 
+	ezm.put("url", image); 
+	try
 	{ 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-		int n = Integer.parseInt(br.readLine()); 
-		String key = "833921b016964f95905442e0fab0c229"; 
-		JSONObject ezm; 
-	
-		while (n-- > 0) 
-		{ 
-			String image = br.readLine(); 
-			ezm = new JSONObject(); 
-			ezm.put("url", image); 
-			try
-			{ 
 
-				// url for microsoft congnitive server. 
-				URL url = 
-			new URL("https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize"); 
-				HttpURLConnection con = 
-						(HttpURLConnection) url.openConnection(); 
+		// url for microsoft congnitive server. 
+	URL url = 
+	new URL("https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize"); 
+	HttpURLConnection con = 
+			(HttpURLConnection) url.openConnection(); 
 
-				// set the request method and properties. 
-				con.setRequestMethod("POST"); 
-				con.setRequestProperty("Ocp-Apim-Subscription-Key", key); 
-				con.setRequestProperty("Content-Type", "application/json"); 
-				con.setRequestProperty("Accept", "application/json"); 
+		// set the request method and properties. 
+	con.setRequestMethod("POST"); 
+	con.setRequestProperty("Ocp-Apim-Subscription-Key", key); 
+	con.setRequestProperty("Content-Type", "application/json"); 
+	con.setRequestProperty("Accept", "application/json"); 
 
-				// As we know the length of our content, 
-				// the following function sets the fixed 
-				// streaming mode length 83 bytes. If 
-				// content length not known, comment the below line. 
-				con.setFixedLengthStreamingMode(83); 
+		// As we know the length of our content, the following function sets the fixed 
+		// streaming mode length 83 bytes. If content length not known, comment the below line. 
+	con.setFixedLengthStreamingMode(83); 
 
-				// set the auto redirection to true 
-				HttpURLConnection.setFollowRedirects(true); 
+		// set the auto redirection to true 
+	HttpURLConnection.setFollowRedirects(true); 
 
-				// override the default value set by 
-				// the static method setFollowRedirect above 
-				con.setInstanceFollowRedirects(false); 
+		// override the default value set by the static method setFollowRedirect above 
+	con.setInstanceFollowRedirects(false); 
 
-				// set the doOutput to true. 
-				con.setDoOutput(true); 
+		// set the doOutput to true. 
+	con.setDoOutput(true); 
 
-				OutputStream out = con.getOutputStream(); 
-				// System.out.println(ezm.toString().getBytes().length); 
+	OutputStream out = con.getOutputStream(); 
+		// System.out.println(ezm.toString().getBytes().length); 
 
-				// write on the output stream 
-				out.write(ezm.toString().getBytes()); 
-				InputStream ip = con.getInputStream(); 
-				BufferedReader br1 = 
-						new BufferedReader(new InputStreamReader(ip)); 
+		// write on the output stream 
+	out.write(ezm.toString().getBytes()); 
+	InputStream ip = con.getInputStream(); 
+	BufferedReader br1 = 
+			new BufferedReader(new InputStreamReader(ip)); 
 
-				// Print the response code 
-				// and response message from server. 
-				System.out.println("Response Code:"
-										+ con.getResponseCode()); 
-				System.out.println("Response Message:"
-									+ con.getResponseMessage()); 
+		// Print the response code and response message from server. 
+	System.out.println("Response Code:"
+				+ con.getResponseCode()); 
+	System.out.println("Response Message:"
+				+ con.getResponseMessage()); 
 
-				// uncomment the following line to 
-				// print the status of 
-				// FollowRedirect property. 
-				// System.out.println("FollowRedirects:" 
-				//			 + HttpURLConnection.getFollowRedirects()); 
+	/* uncomment the following  to 
+	 print the status of 
+	 FollowRedirect property. 
+	 System.out.println("FollowRedirects:" 
+				 + HttpURLConnection.getFollowRedirects()); 
+	 */
 
-				// to print the status of 
-				// instanceFollowRedirect property. 
-				System.out.println("InstanceFollowRedirects:"
-								+ con.getInstanceFollowRedirects()); 
+		// to print the status of instanceFollowRedirect property. 
+	System.out.println("InstanceFollowRedirects:"
+					+ con.getInstanceFollowRedirects()); 
 
-				// to print the 1st header field. 
-				System.out.println("Header field 1:"
-									+ con.getHeaderField(1)); 
+		// to print the 1st header field. 
+	System.out.println("Header field 1:"
+					+ con.getHeaderField(1)); 
 
-				// to print if usingProxy flag set or not. 
-				System.out.println("Using proxy:" + con.usingProxy()); 
+		// to print if usingProxy flag set or not. 
+	System.out.println("Using proxy:" + con.usingProxy()); 
 
-				StringBuilder response = new StringBuilder(); 
-				String responseSingle = null; 
-				while ((responseSingle = br1.readLine()) != null) 
-				{ 
-					response.append(responseSingle); 
-				} 
-				String xx = response.toString(); 
-				System.out.println(xx); 
-
-			} catch (Exception e) 
-			
-			{ 
-				System.out.println(e.getMessage()); 
-			} 
-
-		} 
+	StringBuilder response = new StringBuilder(); 
+	String responseSingle = null; 
+	while ((responseSingle = br1.readLine()) != null) 
+	{ 
+		response.append(responseSingle); 
 	} 
+	String xx = response.toString(); 
+	System.out.println(xx); 
+
+	} catch (Exception e) 
+
+	{ 
+	System.out.println(e.getMessage()); 
+	} 
+
+	} 
+} 
 
 } 
