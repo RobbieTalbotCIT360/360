@@ -1,4 +1,6 @@
---------------------------------------------------------------------------------
+//==================================================================================================
+// Example 1
+//==================================================================================================
 
 package testing;
 
@@ -46,7 +48,137 @@ public class ParameterizedTestFields {
             return i *j;
         }
     }
+ }   
+    
+//==================================================================================================
+// Example 2
+//==================================================================================================
 
+package guru99.junit;		
+
+import static org.junit.Assert.*;				
+import org.junit.Test;		
+
+
+public class Junit4AssertionTest {				
+
+    @Test		
+    public void testAssert(){					
+        		
+        //Variable declaration		
+        String string1="Junit";					
+        String string2="Junit";					
+        String string3="test";					
+        String string4="test";					
+        String string5=null;					
+        int variable1=1;					
+        int	variable2=2;					
+        int[] airethematicArrary1 = { 1, 2, 3 };					
+        int[] airethematicArrary2 = { 1, 2, 3 };					
+        		
+        //Assert statements		
+        assertEquals(string1,string2);					
+        assertSame(string3, string4);					
+        assertNotSame(string1, string3);					
+        assertNotNull(string1);			
+        assertNull(string5);			
+        assertTrue(variable1<variable2);					
+        assertArrayEquals(airethematicArrary1, airethematicArrary2);					
+    }		
 }
 
---------------------------------------------------------------------------------
+//==================================================================================================
+// Example 3
+//==================================================================================================
+
+public class AssertionExample {
+    .............
+  @Test
+  public void test2() {
+      String str = null;
+      Assert.assertTrue("str cannot be empty", str != null && str.length() != 0);
+  }
+    .............
+}
+
+//==================================================================================================
+// Example 4
+//==================================================================================================
+
+public class AssertionExample {
+    .............
+  @Test
+  public void test3() {
+      Number a = new Integer(5);
+      Assert.assertEquals("The number is not 5", a, 5);
+  }
+    .............
+}
+
+//==================================================================================================
+// Example 5
+//==================================================================================================
+
+public class AssertionExample {
+    .............
+  @Test
+  public void test4() {
+      double d = 2.6;
+      Assert.assertEquals("The numbers are not approximately equal", d, 3, 0.5);
+  }
+    .............
+}
+
+//==================================================================================================
+// Example 6
+//==================================================================================================
+
+public class AssertionExample {
+    .............
+  @Test
+  public void test5() {
+      int[] integers = {3, 5, 7};
+      Assert.assertArrayEquals("The numbers are not equal", integers, new int[]{3, 5, 7});
+  }
+
+  @Test
+  public void test6() {
+      Object[] integers = {3, 5, new int[]{7, 9}};
+      Assert.assertArrayEquals("The numbers are not equal", integers,
+              new Object[]{3, 5, new int[]{7, 9}});
+  }
+    .............
+}
+
+//==================================================================================================
+// Example 7
+//==================================================================================================
+
+public class AssertionExample {
+    .............
+  @Test
+  public void test7() {
+      String str1 = new String("test string");
+      String str2 = new String("test string");
+      Assert.assertSame("Same objects reference failed", str1, str1);
+      Assert.assertNotSame("Different objects not same failed", str2, str1);
+      Assert.assertSame("Different objects reference but have same value failed", str2, str1);
+  }
+    .............
+}
+
+//==================================================================================================
+// Example 8
+//==================================================================================================
+
+public class AssertionExample {
+    .............
+  @Test
+  public void test11() {
+      String str = "test string";
+      String str2 = null;
+      Assert.assertNotNull("The str is null.", str);
+      Assert.assertNull("The str is not null.", str2);
+  }
+    .............
+}
